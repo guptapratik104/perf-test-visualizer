@@ -27,7 +27,7 @@ SELECT
   rate(count(*), 1 minute) AS throughput,
   (filter(count(*), WHERE error IS TRUE) / count(*)) * 100 AS error_rate
 FACET appName
-SINCE 30 minutes ago LIMIT 20
+SINCE 30 minutes ago LIMIT 40
 '''
 
 def fetch_nr_data(api_key, account_id, nrql):
