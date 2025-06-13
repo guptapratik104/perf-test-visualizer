@@ -1,3 +1,5 @@
+Deployed Dashboard - https://perf-test-visualizer-nssbw7y2mpj8xgawdrkw3f.streamlit.app/
+
 A dashboard that ranks your services using New Relic metrics and industry-standard performance scoring. This tool automatically evaluates and grades your services based on throughput, latency, and error rates. It applies Apdex methodology with intelligent scoring to help quickly identify which services need attention.
 
 
