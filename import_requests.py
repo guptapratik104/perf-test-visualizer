@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 API_KEY = os.environ.get('NEW_RELIC_API_KEY', '')
 ACCOUNT_ID = os.environ.get('NEW_RELIC_ACCOUNT_ID', '')
