@@ -8,10 +8,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Add this near the top of your script, right after the imports
+st.set_page_config(
+    page_title="Service Performance Dashboard",
+    page_icon="🚦",
+    layout="wide",  # This makes the entire page use full width
+    initial_sidebar_state="collapsed"
+)
 
 
 API_KEY = os.environ.get('NEW_RELIC_API_KEY', '')
 ACCOUNT_ID = os.environ.get('NEW_RELIC_ACCOUNT_ID', '')
+
 
 if not API_KEY:
     st.warning("⚠️ Please set the NEW_RELIC_API_KEY environment variable")
@@ -302,6 +310,10 @@ def main():
     st.dataframe(
         display_df,
         column_config={
+            "Service": st.column_config.TextColumn(
+                "Service",
+                width="large",  # Make service name column wider
+            ),
             "Status": st.column_config.TextColumn(
                 "Status",
                 help="Performance status",
@@ -314,46 +326,54 @@ def main():
                 max_value=100,
                 step=0.1,
                 format="%.1f",
+                width="small",
             ),
             "Throughput": st.column_config.NumberColumn(
                 "Throughput",
                 help="Requests per minute",
                 format="%.1f req/min",
+                width="medium",
             ),
             "P95 Duration": st.column_config.NumberColumn(
                 "P95 Duration", 
                 help="95th percentile response time",
                 format="%.1f ms",
+                width="medium",
             ),
             "Error Rate": st.column_config.NumberColumn(
                 "Error Rate",
                 help="Percentage of failed requests", 
                 format="%.2f%%",
+                width="small",
+            ),
+            "Grade": st.column_config.TextColumn(
+                "Grade",
+                width="medium",
             ),
         },
         hide_index=True,
         use_container_width=True,
     )
 
-    # Performance distribution chart
-    st.subheader("📈 Performance Distribution")
-    fig, ax = plt.subplots(figsize=(12, 8))
-    colors = ['#2E8B57' if score >= 70 else '#FFD700' if score >= 50 else '#DC143C' 
-              for score in df_sorted['Overall Score']]
+    # # Performance distribution chart
+    # st.subheader("📈 Performance Distribution")
+    # fig, ax = plt.subplots(figsize=(12, 8))
+    # colors = ['#2E8B57' if score >= 70 else '#FFD700' if score >= 50 else '#DC143C' 
+    #           for score in df_sorted['Overall Score']]
     
-    bars = ax.barh(df_sorted['Service'], df_sorted['Overall Score'], color=colors)
-    ax.set_xlabel('Overall Performance Score (0-100)')
-    ax.set_title('Service Performance Ranking\n(Green: Good, Yellow: Fair, Red: Critical)')
-    ax.set_xlim(0, 100)
+    # bars = ax.barh(df_sorted['Service'], df_sorted['Overall Score'], color=colors)
+    # ax.set_xlabel('Overall Performance Score (0-100)')
+    # ax.set_title('Service Performance Ranking\n(Green: Good, Yellow: Fair, Red: Critical)')
+    # ax.set_xlim(0, 100)
     
-    # Add score labels on bars
-    for i, (bar, score) in enumerate(zip(bars, df_sorted['Overall Score'])):
-        ax.text(bar.get_width() + 1, bar.get_y() + bar.get_height()/2, 
-                f'{score:.1f}', va='center', fontsize=9)
+    # # Add score labels on bars
+    # for i, (bar, score) in enumerate(zip(bars, df_sorted['Overall Score'])):
+    #     ax.text(bar.get_width() + 1, bar.get_y() + bar.get_height()/2, 
+    #             f'{score:.1f}', va='center', fontsize=9)
     
-    plt.gca().invert_yaxis()
-    plt.tight_layout()
-    st.pyplot(fig)
+    # plt.gca().invert_yaxis()
+    # plt.tight_layout()
+    # st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
